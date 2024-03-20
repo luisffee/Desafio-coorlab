@@ -87,6 +87,8 @@ aside {
       }
 
       .text {
+        padding: 0 0 0 0.6rem;
+        font-size: 1.4rem;
         color: var(--light);
         transition: 0.2s ease-out;
       }
