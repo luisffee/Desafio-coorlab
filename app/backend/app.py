@@ -1,6 +1,6 @@
 from flask import Flask, request,jsonify
 from flask_cors import CORS
-from db import InitDB, Transports
+from db import InitDB, Companies, Cities, Transports
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://coorlab:coorlab@localhost/transports'
@@ -23,15 +23,30 @@ def transportSerializer(transport):
         'bed': transport.bed
 	}
 
-@app.route('/api', methods=['POST','GET'])
-def submitData():
-	response_object = {'status':'success'}
-	if request.method == 'POST':
-		post_data = request.get_json()
-		message = post_data.get('message')
-		print(message)
-		response_object['message'] = 'Message received!'
-		return jsonify(response_object)
+def citySerializer(cities):
+    return {
+        'cities': [city.city for city in cities]
+    }
+
+@app.route('/api/transports', methods=['GET','POST'])
+def getData():
+    transports = Transports.query.order_by(Transports.id.asc()).all()
+    transp_list = []
+    for transport in transports:
+        transp_list.append(transportSerializer(transport))
+    #print(transp_list)
+    return jsonify(transp_list)
+
+@app.route('/api/transports/<int:id>', methods=['GET'])
+def getDataByID(id):
+    transport = Transports.query.filter_by(id=id).one()
+    formatted_transport = transportSerializer(transport)
+    return jsonify(formatted_transport)
+
+@app.route('/api/transports/cities', methods=['GET'])
+def getCities():
+    cities = Cities.query.order_by(Cities.id.asc()).all()
+    return jsonify(citySerializer(cities))
 
 if __name__ == '__main__':
 	app.run(debug=True, port=3000)

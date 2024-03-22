@@ -1,6 +1,0 @@
-flask
-flask-cors
-flask-sqlalchemy
-postgres
-sqlalchemy_utils
-psycopg2

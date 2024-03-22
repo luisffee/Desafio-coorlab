@@ -20,7 +20,20 @@ class InitDB():
     def inject(self):
         for _, items in data.items():
             for item in items:
-                data_loaded = Transports(**item)
+                name = Companies.query.filter_by(name=item['name']).first()
+                if not name:
+                    name = Companies(name=item['name'])
+                    self.db.session.add(name)
+                    self.db.session.commit()
+                city = Cities.query.filter_by(city=item['city']).first()
+                if not city:
+                    city = Cities(city=item['city'])
+                    self.db.session.add(city)
+                    self.db.session.commit()
+                
+                data_loaded = Transports(name=name, city=city, price_confort=item['price_confort'], 
+                                         price_econ=item['price_econ'], duration=item['duration'], 
+                                         seat=item['seat'], bed=item['bed'])
                 self.db.session.add(data_loaded)
                 self.db.session.commit()
 
@@ -37,17 +50,33 @@ class InitDB():
 
 class Transports(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
+    name_id = db.Column(db.Integer, db.ForeignKey('companies.id'), nullable=False)
+    city_id = db.Column(db.Integer, db.ForeignKey('cities.id'), nullable=False)
     price_confort = db.Column(db.String, nullable=False)
     price_econ = db.Column(db.String, nullable=False)
-    city = db.Column(db.String, nullable=False)
     duration = db.Column(db.String, nullable=False)
-    seat =db.Column(db.String, nullable=False)
+    seat = db.Column(db.String, nullable=False)
     bed = db.Column(db.String, nullable=False)
+
+    name = db.relationship('Companies', backref='transports')
+    city = db.relationship('Cities', backref='transports')
+
+class Cities(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    city = db.Column(db.String, unique=True, nullable=False)
+    
+    def __init__(self, city):
+        self.city = city
     
     def __repr__(self):
-        return f'Transport: {self.name}'
-        
-    def __init__(self, **kwargs):
-        for key, value in kwargs.items():
-            setattr(self, key, value)
+        return self.city
+
+class Companies(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, unique=True, nullable=False)
+
+    def __init__(self, name):
+        self.name = name
+    
+    def __repr__(self):
+        return self.name

@@ -12,11 +12,7 @@
         </div>
         <form action="" class="calc-form">
           <h4 class="form-text">Destino</h4>
-          <select class="form-input" placeholder="Selecione o destino">
-            <option value="" hidden disabled selected>
-              Selecione o destino
-            </option>
-          </select>
+          <TravelDestinyOptions :options="transports" />
           <h4 class="form-text">Data</h4>
           <input class="form-input" type="date" name="" id="" placeholder=" " />
           <button class="form-button" type="submit">Buscar</button>
@@ -29,7 +25,20 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import axios from "axios";
+import { ref } from "vue";
+import TravelDestinyOptions from "./TravelDestinyOptions.vue";
+
+const transports = ref(null);
+
+const fetchTransportes = async () => {
+  const { data } = await axios.get("/api/transports/cities");
+  transports.value = data.cities;
+  console.log(transports.value);
+};
+fetchTransportes();
+</script>
 
 <style Lang="scss">
 .form-wrapper {
@@ -132,15 +141,6 @@
       display: flex;
       flex-direction: column;
       margin: 0 2.5rem 0 2.5rem;
-
-      .form-input {
-        display: flex;
-        height: 2.5rem;
-        width: 100%;
-        border-radius: 6px;
-        margin: 0.5rem 0 0 0;
-        font-weight: 200;
-      }
 
       .form-button {
         display: flex;
