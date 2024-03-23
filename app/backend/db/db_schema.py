@@ -30,9 +30,11 @@ class InitDB():
                     city = Cities(city=item['city'])
                     self.db.session.add(city)
                     self.db.session.commit()
-                
-                data_loaded = Transports(name=name, city=city, price_confort=item['price_confort'], 
-                                         price_econ=item['price_econ'], duration=item['duration'], 
+                price_confort = float(item['price_confort'].split(' ')[1])
+                price_econ = float(item['price_econ'].split(' ')[1])
+                duration = int(item['duration'].split('h')[0])
+                data_loaded = Travels(name=name, city=city, price_confort=price_confort, 
+                                         price_econ=price_econ, duration=duration, 
                                          seat=item['seat'], bed=item['bed'])
                 self.db.session.add(data_loaded)
                 self.db.session.commit()
@@ -48,13 +50,13 @@ class InitDB():
                 file.write('Data injected')
         return self.db
 
-class Transports(db.Model):
+class Travels(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name_id = db.Column(db.Integer, db.ForeignKey('companies.id'), nullable=False)
     city_id = db.Column(db.Integer, db.ForeignKey('cities.id'), nullable=False)
-    price_confort = db.Column(db.String, nullable=False)
-    price_econ = db.Column(db.String, nullable=False)
-    duration = db.Column(db.String, nullable=False)
+    price_confort = db.Column(db.Float, nullable=False)
+    price_econ = db.Column(db.Float, nullable=False)
+    duration = db.Column(db.Integer, nullable=False)
     seat = db.Column(db.String, nullable=False)
     bed = db.Column(db.String, nullable=False)
 

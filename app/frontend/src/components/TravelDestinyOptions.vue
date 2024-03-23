@@ -1,16 +1,48 @@
 <template>
-  <select class="form-input" placeholder="Selecione o destino">
-    <option value="" hidden disabled selected>Selecione o destino</option>
-    <option class="options" v-for="(value, key) in props.options" :key="key">
-      {{ value }}
+  <select
+    v-model="selectedCityId"
+    class="form-input"
+    placeholder="Selecione o destino"
+  >
+    <option value="" hidden disabled selected :key="null">
+      Selecione o destino
+    </option>
+    <option
+      class="options"
+      v-for="(city, id) in props.options"
+      :key="id"
+      :value="id"
+    >
+      {{ city }}
     </option>
   </select>
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+import { ref, defineProps, defineEmits, watchEffect } from "vue";
 
 const props = defineProps(["options"]);
+const emitCitySelected = defineEmits(["city-selected"]);
+
+const selectedCityId = ref(null);
+const cities = ref([]);
+
+watchEffect(() => {
+  if (props.options) {
+    cities.value = Object.entries(props.options).map(([id, name]) => ({
+      id,
+      name,
+    }));
+  }
+});
+
+const onCitySelected = () => {
+  emitCitySelected("city-selected", selectedCityId.value);
+};
+
+watchEffect(() => {
+  onCitySelected();
+});
 </script>
 
 <style Lang="scss">
