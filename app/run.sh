@@ -98,4 +98,9 @@ fi
 
 echo "Starting the frontend..."
 # Starting frontend
+
+## NOT WORKING ---> Got to cd frontend and run npm run serve manually
+echo "Run the following command in the terminal to start the frontend:
+cd frontend
+npm run serve"
 gnome-terminal -- bash -c "cd frontend; npm run serve; xdg-open http://localhost:8080"
