@@ -18,6 +18,7 @@ import TravelCalc from "./components/TravelCalc.vue";
 <style Lang="scss">
 :root {
   --primary: #00acb4;
+  --secundary: #1d2838;
   --bright: #e09812;
   --light: #fff;
   --dark: #000;

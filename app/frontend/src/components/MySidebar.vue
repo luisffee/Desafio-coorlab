@@ -35,7 +35,7 @@ aside {
   overflow: hidden;
   padding: 0.5rem;
 
-  background-color: var(--dark-gray);
+  background-color: var(--secundary);
   color: var(--light);
 
   transition: 0.2s ease-out;

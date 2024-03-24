@@ -186,7 +186,7 @@ const onCitySelected = (cityId) => {
     justify-content: center;
     height: 5rem;
     width: 100%;
-    background-color: var(--dark);
+    background-color: var(--secundary);
 
     .material-icons {
       display: flex;
