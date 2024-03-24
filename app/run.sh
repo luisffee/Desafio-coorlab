@@ -2,7 +2,6 @@
 
 if command -v psql >/dev/null 2>&1; then
     echo "PostgreSQL is already installed."
-    continue
 fi
 
 # Install PostgreSQL
